@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JoyBot Partners with AWS to Introduce JoyAd Virtual Billboards | JOYX Newsroom</title>
+<meta name="description" content="JoyBot Inc. (now JOYX) introduces the JoyAd Virtual Billboard Solution, powered by AWS, following successful completion of the AWS Foundational Technical Review.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07090d;--bg-1:#0b0f15;--bg-2:#10151d;
+    --line:rgba(255,255,255,.09);--line-2:rgba(255,255,255,.14);
+    --text:#f3f6f8;--dim:#9aa6b4;--dimmer:#5d6979;
+    --accent:#4ef0a0;--accent-2:#37d6ff;--accent-soft:rgba(78,240,160,.12);--accent-line:rgba(78,240,160,.35);
+    --maxw:1200px;--r:14px;--ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--text);font-family:"Hanken Grotesk",sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(900px 600px at 80% -10%,rgba(78,240,160,.08),transparent 60%),radial-gradient(800px 700px at 5% 12%,rgba(55,214,255,.05),transparent 55%)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:2}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--accent);color:#04130b}
+  h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;line-height:1.05;letter-spacing:-.02em}
+
+  /* nav */
+  header.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all .35s var(--ease)}
+  .nav-inner{max-width:var(--maxw);margin:0 auto;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;transition:padding .35s var(--ease)}
+  header.nav.scrolled{background:rgba(7,9,13,.72);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+  header.nav.scrolled .nav-inner{padding:13px 28px}
+  .logo{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:22px;letter-spacing:-.03em;display:flex;align-items:center}
+  .logo b{color:var(--accent);font-weight:800}
+  .logo .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-left:6px;box-shadow:0 0 12px var(--accent);animation:pulse 2.4s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+  nav.links{display:flex;gap:34px;align-items:center}
+  nav.links a{font-size:14.5px;color:var(--dim);font-weight:500;transition:color .2s;position:relative}
+  nav.links a:hover{color:var(--text)}
+  nav.links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--accent);transition:width .25s var(--ease)}
+  nav.links a:hover::after{width:100%}
+  .menu-toggle{display:none;background:none;border:1px solid var(--line-2);border-radius:10px;width:42px;height:42px;cursor:pointer;color:var(--text);align-items:center;justify-content:center}
+  .menu-toggle svg{width:20px;height:20px}
+
+  /* article */
+  .article{padding:150px 0 40px}
+  .measure{max-width:760px;margin:0 auto}
+  .back{display:inline-flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:34px;transition:color .2s}
+  .back:hover{color:var(--accent)}
+  .back svg{width:14px;height:14px}
+  .release-meta{display:flex;align-items:center;gap:12px;font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;flex-wrap:wrap}
+  .release-meta .dot{width:5px;height:5px;border-radius:50%;background:var(--dimmer)}
+  .release-meta .muted{color:var(--dimmer)}
+  .awspill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--accent-line);background:var(--accent-soft);border-radius:100px;padding:5px 12px;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.1em;color:var(--accent);margin-bottom:20px}
+  .ednote{font-size:13.5px;color:var(--dimmer);font-style:italic;margin-bottom:24px;padding-left:14px;border-left:2px solid var(--line-2)}
+  h1.headline{font-size:clamp(30px,4.4vw,46px);font-weight:800;margin-bottom:30px}
+  .article p{color:#d7dde4;margin-bottom:20px;font-size:17.5px;line-height:1.72}
+  .article p .dateline{font-weight:700;color:var(--text)}
+  .article p strong{font-weight:700;color:var(--text)}
+  .sec-h{font-size:23px;font-weight:700;margin:42px 0 16px;letter-spacing:-.01em}
+  .rule{height:1px;background:var(--line);border:0;margin:30px 0}
+  blockquote.pr-quote{margin:26px 0 10px;padding:4px 0 4px 24px;border-left:2px solid var(--accent-line);
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:500;font-size:20px;line-height:1.5;letter-spacing:-.01em;color:#eef2f5;font-style:normal}
+  .attribution{font-family:"JetBrains Mono",monospace;font-size:12.5px;letter-spacing:.06em;color:var(--dim);margin:0 0 30px 24px}
+  .attribution b{color:var(--text);font-weight:600}
+  ul.benefits{list-style:none;margin:6px 0 24px;padding:0}
+  ul.benefits li{padding:16px 0;border-top:1px solid var(--line);color:#d7dde4;font-size:16.5px;line-height:1.6;display:flex;gap:14px}
+  ul.benefits li:last-child{border-bottom:1px solid var(--line)}
+  ul.benefits li::before{content:"";flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-top:9px;box-shadow:0 0 8px var(--accent)}
+  ul.benefits li b{color:var(--text);font-weight:700}
+  .endorse{margin:32px 0;padding:26px 28px;border:1px solid var(--accent-line);background:var(--accent-soft);border-radius:var(--r)}
+  .endorse .lab{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .endorse .q{font-family:"Bricolage Grotesque",sans-serif;font-weight:500;font-size:18.5px;line-height:1.5;color:#eef2f5;letter-spacing:-.01em}
+  .endorse .by{margin-top:16px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.06em;color:var(--dim)}
+  .endorse .by b{color:var(--text);font-weight:600}
+  .about-h{font-size:17px;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;color:var(--text);margin:30px 0 10px}
+  .article a.inline-link{color:var(--accent);border-bottom:1px solid var(--accent-line);transition:border-color .2s}
+  .article a.inline-link:hover{border-color:var(--accent)}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:54px 0 40px;margin-top:60px}
+  .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;margin-bottom:46px}
+  .foot-brand .logo{margin-bottom:16px}
+  .foot-brand p{color:var(--dim);font-size:14.5px;max-width:280px}
+  .foot-col h4{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dimmer);margin-bottom:18px;font-weight:500}
+  .foot-col a{display:block;color:var(--dim);font-size:14.5px;margin-bottom:11px;transition:color .2s}
+  .foot-col a:hover{color:var(--accent)}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--line);flex-wrap:wrap;gap:14px}
+  .foot-bottom span{color:var(--dimmer);font-size:13px;font-family:"JetBrains Mono",monospace;letter-spacing:.04em}
+
+  @media(max-width:900px){
+    nav.links{display:none}
+    .menu-toggle{display:flex}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:32px}
+    .article{padding:120px 0 30px}
+    nav.links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:rgba(7,9,13,.97);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:10px 28px 22px}
+    nav.links.open a{padding:14px 0;border-bottom:1px solid var(--line);width:100%}
+  }
+  @media(max-width:560px){.foot-grid{grid-template-columns:1fr}.wrap{padding:0 20px}}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">JOY<b>X</b><span class="dot"></span></a>
+    <nav class="links" id="navlinks">
+      <a href="index.html#platform">Platform</a>
+      <a href="index.html#technology">Technology</a>
+      <a href="index.html#sports">Sports</a>
+      <a href="index.html#partners">Partners</a>
+      <a href="index.html#news">News</a>
+      <a href="index.html#company">Company</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<article class="article">
+  <div class="wrap measure">
+    <a href="index.html#news" class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+      Back to Newsroom
+    </a>
+
+    <div class="release-meta"><span>Press Release</span><span class="dot"></span><span class="muted">February 24, 2025</span><span class="dot"></span><span class="muted">Palo Alto, CA</span></div>
+    <div class="awspill">✓ AWS Foundational Technical Review — Completed</div>
+    <div class="ednote">JoyBot Inc. is now JOYX Inc. This announcement is reproduced as originally issued in February 2025.</div>
+
+    <h1 class="headline">JoyBot Inc. Partners with AWS to Introduce JoyAd Virtual Billboard Solutions, Powered by AWS</h1>
+
+    <p><span class="dateline">February 24, 2025 – Palo Alto, California —</span> JoyBot Inc., a leading innovator in AI-driven video solutions, today introduced its new JoyAd Virtual Billboard Solution, powered by Amazon Web Services (AWS). This announcement follows JoyBot’s successful completion of AWS’s Foundational Technical Review (FTR), ensuring the solution meets AWS’s stringent technical, operational, and security standards.</p>
+
+    <p>JoyAd is a cutting-edge virtual insertion solution that leverages unused or blank spaces within video content to create dynamic, virtual billboards. These billboards can host tailored advertisements, video overlays, and interactive elements, offering content owners new incremental monetization opportunities while enhancing viewer experiences.</p>
+
+    <p>Leveraging AWS’s infrastructure, JoyAd also introduces advanced capabilities, including real-time 3D modeling, real-time rendering, and real-time insertion. The solution operates seamlessly based on pure streaming signals, without requiring additional on-site hardware or changes to internal operational processes. This streamlined approach allows JoyBot to scale rapidly and deliver significant value to all stakeholders in the content ecosystem.</p>
+
+    <blockquote class="pr-quote">“We’re excited to bring the JoyAd solution to life on a global scale. With AWS’s trusted infrastructure and the successful completion of the FTR, we can deliver a secure and dynamic platform that empowers content owners to unlock new revenue streams from unused video spaces, transforming how video monetization is approached.”</blockquote>
+    <p class="attribution">— <b>Tong Zhang</b>, CEO of JoyBot Inc.</p>
+
+    <h2 class="sec-h">Key Benefits of the JoyAd Virtual Billboard Solution</h2>
+    <ul class="benefits">
+      <li><span><b>Incremental Revenue Streams:</b> Unlock monetization opportunities by utilizing unused video space.</span></li>
+      <li><span><b>Real-Time Innovation:</b> Enable real-time 3D modeling, rendering, and insertion based on streaming signals, without additional hardware or process changes.</span></li>
+      <li><span><b>Dynamic Ad Control:</b> Customize and manage billboard content in real time across regions.</span></li>
+      <li><span><b>Global Reach:</b> Scale deployments rapidly with AWS’s robust global network.</span></li>
+      <li><span><b>Enhanced Viewer Experience:</b> Seamlessly integrate virtual billboards without disrupting video quality.</span></li>
+    </ul>
+
+    <p>JoyAd Virtual Billboard is JoyBot’s latest advancement in its work with AWS.</p>
+
+    <div class="endorse">
+      <div class="lab">From the AWS Partner Network</div>
+      <div class="q">“Excited to welcome JoyBot Inc. as an AWS partner after their completion of the AWS Foundational Technical Review! Their innovative virtual billboards solution enables content rights owners to increase monetization without disrupting the viewer’s experience, with no calibration required.”</div>
+      <div class="by">— <b>Gregoire Rouyer</b>, Amazon Web Services (AWS)</div>
+    </div>
+
+    <hr class="rule">
+
+    <h3 class="about-h">About JOYX</h3>
+    <p>JOYX (formerly JoyBot Inc.) is a cutting-edge spatial computing and AI video advertising company with deep R&amp;D roots in Silicon Valley. Built on a cloud-native architecture running entirely on Amazon Web Services (AWS) and designed for the modern streaming era, JOYX’s proprietary AI platform utilizes real-time computer vision and 3D rendering to seamlessly integrate broadcast-grade virtual graphics directly into live video streams and venue environments. By transforming underutilized spaces into dynamic virtual billboards without physical on-site integrations, JOYX empowers broadcasters, leagues, and content owners to effortlessly elevate their visual presentation and maximize commercial revenue. <a class="inline-link" href="https://myjoyx.com" target="_blank" rel="noopener">https://myjoyx.com</a></p>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="logo">JOY<b>X</b></a>
+        <p>Spatial AI for live sports. Broadcast-grade virtual billboards, generated and inserted in real time.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Product</h4>
+        <a href="index.html#platform">JoyAd platform</a>
+        <a href="index.html#technology">Spatial intelligence</a>
+        <a href="index.html#sports">Sports coverage</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="index.html#partners">Partners</a>
+        <a href="index.html#news">News</a>
+        <a href="index.html#infrastructure">Built on AWS</a>
+      </div>
+      <div class="foot-col">
+        <h4>Get in touch</h4>
+        <a href="mailto:hello@myjoyx.com">hello@myjoyx.com</a>
+        <a href="mailto:partners@myjoyx.com">partners@myjoyx.com</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 JOYX Inc. All rights reserved.</span>
+      <span>Powered by AWS · Las Vegas, NV</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 30);
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  const toggle = document.getElementById('menuToggle');
+  const links = document.getElementById('navlinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+</script>
+</body>
+</html>
