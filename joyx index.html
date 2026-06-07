@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOYX | The Future of In-Video Advertising</title>
+<meta name="description" content="JOYX inserts broadcast-grade virtual billboards into live sports in real time — generated, rendered, and placed from a pure streaming signal. No on-site hardware. Powered by spatial AI on AWS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07090d;
+    --bg-1:#0b0f15;
+    --bg-2:#10151d;
+    --bg-3:#161d27;
+    --line:rgba(255,255,255,.09);
+    --line-2:rgba(255,255,255,.14);
+    --text:#f3f6f8;
+    --dim:#9aa6b4;
+    --dimmer:#5d6979;
+    --accent:#4ef0a0;
+    --accent-2:#37d6ff;
+    --accent-soft:rgba(78,240,160,.12);
+    --accent-line:rgba(78,240,160,.35);
+    --maxw:1200px;
+    --r:14px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Hanken Grotesk",sans-serif;
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    position:relative;
+  }
+  /* grain + atmosphere */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(900px 600px at 78% -8%, rgba(78,240,160,.10), transparent 60%),
+      radial-gradient(800px 700px at 8% 18%, rgba(55,214,255,.06), transparent 55%),
+      radial-gradient(1000px 900px at 50% 120%, rgba(78,240,160,.05), transparent 60%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.035;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:2}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--accent);color:#04130b}
+
+  h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;line-height:1.02;letter-spacing:-.02em}
+  .mono{font-family:"JetBrains Mono",monospace;font-weight:500;letter-spacing:.16em;text-transform:uppercase;font-size:12px}
+  .hl{color:var(--accent);font-weight:600}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--accent);font-family:"JetBrains Mono",monospace;
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;margin-bottom:22px}
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--accent);opacity:.7}
+
+  /* ---------- NAV ---------- */
+  header.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all .35s var(--ease)}
+  .nav-inner{max-width:var(--maxw);margin:0 auto;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;transition:padding .35s var(--ease)}
+  header.nav.scrolled{background:rgba(7,9,13,.72);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+  header.nav.scrolled .nav-inner{padding:13px 28px}
+  .logo{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:22px;letter-spacing:-.03em;display:flex;align-items:center;gap:2px}
+  .logo b{color:var(--accent);font-weight:800}
+  .logo .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-left:6px;box-shadow:0 0 12px var(--accent);animation:pulse 2.4s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+  nav.links{display:flex;gap:34px;align-items:center}
+  nav.links a{font-size:14.5px;color:var(--dim);font-weight:500;transition:color .2s;position:relative}
+  nav.links a:hover{color:var(--text)}
+  nav.links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--accent);transition:width .25s var(--ease)}
+  nav.links a:hover::after{width:100%}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:14.5px;padding:11px 20px;border-radius:100px;
+    background:var(--accent);color:#04130b;border:1px solid var(--accent);transition:all .25s var(--ease);cursor:pointer;font-family:"Hanken Grotesk",sans-serif}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px -8px rgba(78,240,160,.5)}
+  .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line-2)}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent);box-shadow:none;background:var(--accent-soft)}
+  .btn svg{width:15px;height:15px}
+  .menu-toggle{display:none;background:none;border:1px solid var(--line-2);border-radius:10px;width:42px;height:42px;cursor:pointer;color:var(--text);align-items:center;justify-content:center}
+  .menu-toggle svg{width:20px;height:20px}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;padding:170px 0 90px}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  .hero-single{max-width:880px;margin:0 auto;text-align:center}
+  .hero-single .lede{margin:0 auto 34px}
+  .hero-single .cta-row{justify-content:center}
+  .hero h1{font-size:clamp(46px,6.6vw,90px);font-weight:800;margin:0 0 26px}
+  .hero h1 .blank{position:relative;color:var(--accent);white-space:nowrap}
+  .hero h1 .blank::after{content:"";position:absolute;left:-4px;right:-4px;top:8%;bottom:8%;border:1.5px dashed var(--accent-line);border-radius:8px;z-index:-1}
+  .hero p.lede{font-size:clamp(17px,1.7vw,20px);color:var(--dim);max-width:540px;margin-bottom:34px}
+  .hero .cta-row{display:flex;gap:14px;flex-wrap:wrap}
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .d1{transition-delay:.05s}.d2{transition-delay:.15s}.d3{transition-delay:.25s}.d4{transition-delay:.35s}.d5{transition-delay:.45s}
+
+  /* hero scene */
+  .scene-shell{position:relative}
+  .scene-frame{position:relative;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:
+      linear-gradient(180deg,#0a1119,#070b11 70%);box-shadow:0 40px 90px -40px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.04)}
+  .scene-frame svg{display:block;width:100%;height:auto}
+  .scene-tag{position:absolute;top:14px;left:14px;display:flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;
+    font-size:10.5px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;background:rgba(7,9,13,.55);padding:6px 11px;border-radius:100px;border:1px solid var(--accent-line)}
+  .scene-tag .rec{width:7px;height:7px;border-radius:50%;background:#ff5470;box-shadow:0 0 9px #ff5470;animation:pulse 1.6s infinite}
+  .chip{position:absolute;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.1em;color:var(--text);
+    background:rgba(11,15,21,.82);border:1px solid var(--line-2);padding:8px 12px;border-radius:10px;backdrop-filter:blur(8px);
+    display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px -10px rgba(0,0,0,.7);opacity:0;animation:chipIn .7s var(--ease) forwards}
+  .chip i{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);font-style:normal}
+  .chip.c1{top:18%;right:-18px;animation-delay:1.5s}
+  .chip.c2{bottom:24%;left:-22px;animation-delay:1.8s}
+  .chip.c3{bottom:8%;right:8%;animation-delay:2.1s}
+  @keyframes chipIn{from{opacity:0;transform:translateY(10px) scale(.95)}to{opacity:1;transform:none}}
+
+  /* ---------- LOGO STRIP ---------- */
+  .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:30px 0;margin-top:30px}
+  .strip-inner{display:flex;align-items:center;gap:38px;flex-wrap:wrap;justify-content:center}
+  .strip .lab{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dimmer)}
+  .wm{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:19px;letter-spacing:-.01em;color:var(--dim);opacity:.85;transition:color .25s,opacity .25s}
+  .wm:hover{color:var(--text);opacity:1}
+  .strip .sep{width:1px;height:22px;background:var(--line-2)}
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section.block{padding:100px 0;position:relative}
+  .sec-head{max-width:720px;margin-bottom:54px}
+  .sec-head h2{font-size:clamp(32px,4.2vw,52px);margin-bottom:20px}
+  .sec-head p{color:var(--dim);font-size:clamp(16px,1.5vw,18.5px)}
+
+  /* stat cards */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .stat{border:1px solid var(--line);border-radius:var(--r);padding:28px 26px;background:linear-gradient(180deg,var(--bg-1),transparent);
+    transition:border-color .3s,transform .3s}
+  .stat:hover{border-color:var(--accent-line);transform:translateY(-4px)}
+  .stat .big{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:clamp(30px,3.6vw,44px);color:var(--accent);letter-spacing:-.03em;line-height:1}
+  .stat .lab{color:var(--dim);margin-top:12px;font-size:14px;max-width:230px}
+  .src-note{margin-top:20px;font-size:12.5px;color:var(--dimmer);font-family:"JetBrains Mono",monospace;letter-spacing:.03em}
+
+  /* solution split */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center}
+  .feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+  .feat{padding:28px;border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,var(--bg-1),transparent);display:flex;gap:18px;align-items:flex-start;transition:border-color .3s,transform .3s}
+  .feat:hover{border-color:var(--accent-line);transform:translateY(-4px)}
+  .feat .ic{flex:0 0 auto;width:42px;height:42px;border-radius:11px;border:1px solid var(--accent-line);background:var(--accent-soft);
+    display:flex;align-items:center;justify-content:center;color:var(--accent)}
+  .feat .ic svg{width:21px;height:21px}
+  .feat h3{font-size:18.5px;font-weight:700;margin-bottom:5px;letter-spacing:-.01em;font-family:"Hanken Grotesk",sans-serif}
+  .feat p{color:var(--dim);font-size:15px;margin:0}
+
+  /* before / after demo */
+  .ba{position:relative;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#0a1119,#070b11)}
+  .ba svg{display:block;width:100%;height:auto}
+  .ba-toggle{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;background:rgba(7,9,13,.75);
+    border:1px solid var(--line-2);border-radius:100px;padding:5px;backdrop-filter:blur(10px);gap:4px}
+  .ba-toggle button{border:none;background:transparent;color:var(--dim);font-family:"JetBrains Mono",monospace;font-size:11px;
+    letter-spacing:.1em;text-transform:uppercase;padding:9px 16px;border-radius:100px;cursor:pointer;transition:all .25s}
+  .ba-toggle button.active{background:var(--accent);color:#04130b}
+  #ba-board{opacity:0;transition:opacity .6s var(--ease)}
+  .ba.on #ba-board{opacity:1}
+  .ba.on #ba-empty-label{opacity:0}
+  #ba-empty-label{transition:opacity .4s}
+
+  /* pipeline */
+  .pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;counter-reset:step}
+  .pipe .node{padding:30px 26px 30px 0;position:relative;border-top:1px solid var(--line)}
+  .pipe .node::before{counter-increment:step;content:"0" counter(step);font-family:"JetBrains Mono",monospace;font-size:12px;
+    color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:18px}
+  .pipe .node .marker{position:absolute;top:-5px;left:0;width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+  .pipe .node h3{font-size:20px;margin-bottom:10px;font-weight:700;letter-spacing:-.01em;font-family:"Hanken Grotesk",sans-serif}
+  .pipe .node p{color:var(--dim);font-size:14.5px;margin:0;padding-right:14px}
+
+  /* sports grid */
+  .sports{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .sport{border:1px solid var(--line);border-radius:var(--r);padding:26px 22px;display:flex;align-items:center;gap:14px;
+    background:linear-gradient(180deg,var(--bg-1),transparent);transition:all .3s var(--ease)}
+  .sport:hover{border-color:var(--accent-line);transform:translateY(-4px);background:var(--accent-soft)}
+  .sport svg{width:26px;height:26px;color:var(--accent);flex:0 0 auto}
+  .sport span{font-weight:600;font-size:16px}
+
+  /* partnership */
+  .partner{border:1px solid var(--line);border-radius:20px;padding:54px;background:
+      radial-gradient(700px 400px at 80% -20%,rgba(78,240,160,.10),transparent 60%),linear-gradient(180deg,var(--bg-1),transparent)}
+  .quote{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:clamp(22px,2.6vw,30px);line-height:1.32;
+    letter-spacing:-.02em;max-width:840px;margin:30px 0}
+  .quote .accent{color:var(--accent)}
+  .byline{display:flex;align-items:center;gap:14px}
+  .byline .av{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;color:#04130b;font-size:18px}
+  .byline .who b{display:block;font-weight:700;font-size:15.5px}
+  .byline .who span{color:var(--dim);font-size:13.5px;font-family:"JetBrains Mono",monospace;letter-spacing:.06em}
+  .pchips{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+  .pchip{border:1px solid var(--line-2);border-radius:100px;padding:9px 18px;font-size:13.5px;color:var(--dim);
+    font-family:"JetBrains Mono",monospace;letter-spacing:.05em}
+  .pchip b{color:var(--accent);font-weight:600}
+
+  /* aws */
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+  .tile{border:1px solid var(--line);border-radius:var(--r);padding:30px;background:linear-gradient(180deg,var(--bg-1),transparent);transition:border-color .3s}
+  .tile:hover{border-color:var(--accent-line)}
+  .tile .ic{width:44px;height:44px;border-radius:11px;background:var(--accent-soft);border:1px solid var(--accent-line);
+    display:flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:18px}
+  .tile .ic svg{width:22px;height:22px}
+  .tile h3{font-size:17.5px;margin-bottom:8px;font-weight:700;font-family:"Hanken Grotesk",sans-serif}
+  .tile p{color:var(--dim);font-size:14.5px;margin:0}
+  .aws-badge{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--accent-line);background:var(--accent-soft);
+    border-radius:100px;padding:9px 18px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.08em;color:var(--accent);margin-top:26px}
+
+  /* business model */
+  .bm{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .bm-card{border:1px solid var(--line);border-radius:var(--r);padding:36px 32px;background:linear-gradient(180deg,var(--bg-1),transparent);transition:all .3s}
+  .bm-card:hover{border-color:var(--accent-line);transform:translateY(-4px)}
+  .bm-card .num{font-family:"JetBrains Mono",monospace;color:var(--accent);font-size:12px;letter-spacing:.14em;margin-bottom:20px}
+  .bm-card h3{font-size:22px;margin-bottom:12px;font-weight:700;font-family:"Hanken Grotesk",sans-serif;letter-spacing:-.01em}
+  .bm-card p{color:var(--dim);font-size:15px;margin:0}
+
+  /* CTA */
+  .cta{text-align:center;border:1px solid var(--line);border-radius:24px;padding:80px 40px;position:relative;overflow:hidden;
+    background:radial-gradient(700px 380px at 50% 0%,rgba(78,240,160,.13),transparent 65%),linear-gradient(180deg,var(--bg-1),transparent)}
+  .cta h2{font-size:clamp(34px,5vw,60px);margin-bottom:18px}
+  .cta p{color:var(--dim);font-size:19px;margin-bottom:34px}
+  .cta .cta-row{justify-content:center;display:flex;gap:14px;flex-wrap:wrap}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:64px 0 40px;margin-top:40px}
+  .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px}
+  .foot-brand .logo{margin-bottom:16px}
+  .foot-brand p{color:var(--dim);font-size:14.5px;max-width:280px}
+  .foot-col h4{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dimmer);margin-bottom:18px;font-weight:500}
+  .foot-col a{display:block;color:var(--dim);font-size:14.5px;margin-bottom:11px;transition:color .2s}
+  .foot-col a:hover{color:var(--accent)}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--line);flex-wrap:wrap;gap:14px}
+  .foot-bottom span{color:var(--dimmer);font-size:13px;font-family:"JetBrains Mono",monospace;letter-spacing:.04em}
+
+  /* news */
+  .news-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:34px}
+  .news-tab{border:1px solid var(--line-2);background:transparent;color:var(--dim);font-family:"JetBrains Mono",monospace;
+    font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:9px 16px;border-radius:100px;cursor:pointer;transition:all .22s}
+  .news-tab:hover{color:var(--text);border-color:var(--accent-line)}
+  .news-tab.active{background:var(--accent);color:#04130b;border-color:var(--accent)}
+  .news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+  .ncard{border:1px solid var(--line);border-radius:var(--r);padding:28px;background:linear-gradient(180deg,var(--bg-1),transparent);
+    display:flex;flex-direction:column;gap:14px;transition:all .3s var(--ease);min-height:236px}
+  .ncard:hover{border-color:var(--accent-line);transform:translateY(-4px)}
+  .ncard .meta{display:flex;align-items:center;gap:12px;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
+  .ncard .cat{color:var(--accent);border:1px solid var(--accent-line);background:var(--accent-soft);padding:4px 9px;border-radius:100px}
+  .ncard .date{color:var(--dimmer)}
+  .ncard h3{font-family:"Bricolage Grotesque",sans-serif;font-size:19px;font-weight:700;line-height:1.18;letter-spacing:-.01em}
+  .ncard p{color:var(--dim);font-size:14px;margin:0;flex:1}
+  .ncard .more{color:var(--accent);font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;margin-top:auto}
+  .ncard .more svg{width:14px;height:14px}
+  .ncard.slot{border-style:dashed;background:transparent}
+  .ncard.slot .ph{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--line-2);border-radius:10px;color:var(--dimmer)}
+  .ncard.slot .ph svg{width:18px;height:18px}
+  .ncard.slot h3{color:var(--dim)}
+  .ncard.hide{display:none}
+
+  /* responsive */
+  @media(max-width:900px){
+    nav.links{display:none}
+    .menu-toggle{display:flex}
+    .hero-grid,.split,.feat-grid{grid-template-columns:1fr;gap:40px}
+    .scene-shell{order:-1}
+    .stats,.tiles,.bm{grid-template-columns:1fr}
+    .pipe{grid-template-columns:1fr 1fr}
+    .sports{grid-template-columns:1fr 1fr}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:32px}
+    .partner{padding:36px 26px}
+    section.block{padding:72px 0}
+    .hero{padding:130px 0 60px}
+    nav.links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;
+      background:rgba(7,9,13,.97);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:10px 28px 22px}
+    nav.links.open a{padding:14px 0;border-bottom:1px solid var(--line);width:100%}
+  }
+  @media(max-width:560px){
+    .pipe,.sports,.foot-grid{grid-template-columns:1fr}
+    .strip .sep{display:none}
+    .wrap{padding:0 20px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+    .chip{opacity:1}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">JOY<b>X</b><span class="dot"></span></a>
+    <nav class="links" id="navlinks">
+      <a href="#platform">Platform</a>
+      <a href="#technology">Technology</a>
+      <a href="#sports">Sports</a>
+      <a href="#partners">Partners</a>
+      <a href="#news">News</a>
+      <a href="#company">Company</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-single">
+    <div class="hero-copy">
+      <div class="eyebrow reveal d1">Real-time Spatial Intelligence</div>
+      <h1 class="reveal d2">Monetize <span class="blank">the&nbsp;blank</span>.</h1>
+      <p class="lede reveal d3">JOYX's real-time <span class="hl">spatial AI</span> inserts broadcast-grade virtual billboards into live sports — generated, rendered, and placed from a pure streaming signal. No on-site hardware. No disruption to the broadcast. Just new revenue from space that delivers no economic benefit today.</p>
+    </div>
+
+  </div>
+
+  <!-- LOGO STRIP -->
+  <div class="strip">
+    <div class="wrap strip-inner reveal">
+      <span class="lab">Powering live sports for</span>
+      <span class="wm">Overnght</span>
+      <span class="wm">USRowing</span>
+      <span class="wm">USA&nbsp;Water&nbsp;Polo</span>
+      <span class="sep"></span>
+      <span class="lab" style="color:var(--accent)">Built on AWS</span>
+    </div>
+  </div>
+</section>
+
+<!-- OPPORTUNITY -->
+<section class="block" id="opportunity">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">The opportunity</div>
+      <h2>Every broadcast is full of premium real estate — already in frame, ready to work.</h2>
+      <p>Live sports command billions of engaged minutes — yet vast stretches of every frame go unmonetized. Traditional on-screen sponsorship demands costly on-site rigs and locks premium graphics to a handful of legacy broadcasters. JOYX removes the hardware, and the limits.</p>
+    </div>
+    <div class="stats">
+      <div class="stat reveal d1"><div class="big">$615B</div><div class="lab">Projected global digital video advertising market by 2030.</div></div>
+      <div class="stat reveal d2"><div class="big">0</div><div class="lab">On-site cameras, sensors, or hardware JOYX requires to deploy.</div></div>
+      <div class="stat reveal d3"><div class="big">Real&#8209;time</div><div class="lab">3D modeling, rendering &amp; insertion — generated live, into active play, not just dead-ball moments.</div></div>
+    </div>
+    <p class="src-note reveal">Source: digital video advertising forecast, The Business Research Company (2026).</p>
+  </div>
+</section>
+
+<!-- PLATFORM / SOLUTION -->
+<section class="block" id="platform">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">The platform</div>
+      <h2 style="font-size:clamp(30px,4vw,48px)">JoyAd turns blank space into branded value.</h2>
+      <p>JoyAd is a virtual insertion engine that finds the unused surfaces inside live video and fills them with broadcast-grade billboards — dynamic, regional, and seamless. New inventory, no new ad breaks.</p>
+    </div>
+    <div class="feat-grid reveal">
+          <div class="feat">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <div><h3>Incremental revenue</h3><p>Monetize surfaces that exist in every frame — without adding a single ad break.</p></div>
+          </div>
+          <div class="feat">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></div>
+            <div><h3>Real-time generation</h3><p>3D modeling, rendering, and insertion happen live, from the broadcast signal itself.</p></div>
+          </div>
+          <div class="feat">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></div>
+            <div><h3>Dynamic control</h3><p>Swap creative by region, audience, or moment — managed centrally, on the fly.</p></div>
+          </div>
+          <div class="feat">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div><h3>Seamless experience</h3><p>Broadcast-grade integration that matches lighting and motion — viewers never feel it.</p></div>
+          </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNOLOGY -->
+<section class="block" id="technology">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Spatial intelligence</div>
+      <h2>A <span class="hl">spatial-AI</span> engine trained on live sport.</h2>
+      <p>Our self-trained spatial models understand the geometry, motion, and surfaces of live competition — adapting in real time, frame by frame. From a single broadcast feed to enhanced output, the entire pipeline runs in the cloud.</p>
+    </div>
+    <div class="pipe">
+      <div class="node reveal d1"><span class="marker"></span><h3>Ingest</h3><p>Take the pure broadcast stream. Nothing added on-site — no cameras, sensors, or rigs.</p></div>
+      <div class="node reveal d2"><span class="marker"></span><h3>Understand</h3><p>Spatial AI builds a live 3D model of the scene and detects every insertable surface.</p></div>
+      <div class="node reveal d3"><span class="marker"></span><h3>Render</h3><p>Virtual billboards are generated and rendered to match lighting, motion, and depth.</p></div>
+      <div class="node reveal d4"><span class="marker"></span><h3>Deliver</h3><p>The enhanced stream goes out in real time — frame-accurate, seamless, broadcast-grade.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SPORTS -->
+<section class="block" id="sports">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Coverage</div>
+      <h2>Built for the way each sport moves.</h2>
+      <p>One spatial engine, tuned across disciplines — and expanding.</p>
+    </div>
+    <div class="sports">
+      <div class="sport reveal d1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v13M12 15l5-2.5M12 15l-5-2.5"/><circle cx="12" cy="19" r="3"/></svg><span>Golf</span></div>
+      <div class="sport reveal d1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2v20M4.5 4.5c3 3 3 12 0 15M19.5 4.5c-3 3-3 12 0 15"/></svg><span>Basketball</span></div>
+      <div class="sport reveal d2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="m12 7 3.5 2.5-1.3 4.1h-4.4L8.5 9.5z"/></svg><span>Soccer</span></div>
+      <div class="sport reveal d2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17c3 0 4-2 9-2s6 2 9 2M2 13c2.5 1 5-1 6-3s2-4 4-4 3 2 4 4 3.5 4 6 3"/></svg><span>Rowing</span></div>
+      <div class="sport reveal d3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 15c2 0 3-1.5 6-1.5s4 1.5 6 1.5 3-1.5 6-1.5"/><circle cx="9" cy="7" r="2.5"/><path d="M11 9.5 14 12"/></svg><span>Water Polo</span></div>
+      <div class="sport reveal d3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="18" r="2.5"/><path d="M8 16 18 6M16 4l4 4M14 6l4 4"/></svg><span>Hockey</span></div>
+      <div class="sport reveal d4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M4.5 5c4 3 4 11 0 14M19.5 5c-4 3-4 11 0 14"/></svg><span>Tennis</span></div>
+      <div class="sport reveal d4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg><span>& more</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="block" id="partners">
+  <div class="wrap">
+    <div class="partner reveal">
+      <div class="eyebrow">Partnership</div>
+      <h2 style="font-size:clamp(28px,3.6vw,44px)">A multi-year exclusive with Overnght.</h2>
+      <p style="color:var(--dim);max-width:760px;margin-top:18px">JOYX and Overnght — the fastest-growing global network for Olympic, collegiate, and premium emerging sports, with multi-year digital rights to USRowing, USA Water Polo, and more — have formed a multi-year strategic partnership to bring cloud-native, zero-hardware spatial graphics to live competition across the sports ecosystem.</p>
+      <blockquote class="quote">“The future of sports media lives in the cloud — where technology drives both fan engagement and business growth. By transforming underutilized spaces into dynamic brand touchpoints directly within the live action, our zero&#8209;CAPEX platform creates a true <span class="accent">win&#8209;win ecosystem</span>.”</blockquote>
+      <div class="byline">
+        <div class="av">TZ</div>
+        <div class="who"><b>Tong Zhang</b><span>CEO, JOYX Inc.</span></div>
+      </div>
+      <div class="pchips">
+        <div class="pchip"><b>Multi-year</b> strategic partnership</div>
+        <div class="pchip">Digital rights: <b>USRowing</b> &amp; <b>USA Water Polo</b></div>
+        <div class="pchip"><b>Olympic</b> · collegiate · emerging sports</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AWS / INFRASTRUCTURE -->
+<section class="block" id="infrastructure">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Infrastructure</div>
+      <h2>Built on AWS. Ready for the world.</h2>
+      <p>JOYX runs entirely on Amazon Web Services and has completed the AWS Foundational Technical Review — meeting AWS's standards for technical, operational, and security excellence. Deployments scale globally and securely from day one.</p>
+      <div class="aws-badge">✓ AWS Foundational Technical Review — Completed</div>
+    </div>
+    <div class="tiles">
+      <div class="tile reveal d1">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2c3 3 3 17 0 20M12 2c-3 3-3 17 0 20"/></svg></div>
+        <h3>Global scale</h3><p>Spin up real-time pipelines anywhere on AWS's worldwide network, on demand.</p>
+      </div>
+      <div class="tile reveal d2">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <h3>Security &amp; compliance</h3><p>Architected to AWS technical, operational, and security review standards.</p>
+      </div>
+      <div class="tile reveal d3">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></div>
+        <h3>Elastic real-time compute</h3><p>GPU-backed rendering that flexes with every event — no idle hardware.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUSINESS MODEL / COMPANY -->
+<section class="block" id="company">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">How we partner</div>
+      <h2>Aligned with rights owners, by design.</h2>
+      <p>No upfront media buys. No capital expense. JOYX earns alongside the content owners we serve.</p>
+    </div>
+    <div class="bm">
+      <div class="bm-card reveal d1"><div class="num">/ 01</div><h3>Revenue share</h3><p>We win when you win. New inventory, shared upside — no slots to buy in advance.</p></div>
+      <div class="bm-card reveal d2"><div class="num">/ 02</div><h3>Pay as you go</h3><p>Cash-flow friendly. You pay for value delivered, event by event.</p></div>
+      <div class="bm-card reveal d3"><div class="num">/ 03</div><h3>Zero capex</h3><p>No hardware, no integration overhead, no change to how you produce the broadcast.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="block" id="news">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Newsroom</div>
+      <h2>News &amp; insights.</h2>
+      <p>JOYX announcements, plus what's moving in spatial AI, live sports, and brand advertising.</p>
+    </div>
+    <div class="news-tabs reveal" id="newsTabs">
+      <button class="news-tab active" data-cat="all">All</button>
+      <button class="news-tab" data-cat="joyx">JOYX News</button>
+      <button class="news-tab" data-cat="ai">Spatial AI</button>
+      <button class="news-tab" data-cat="sports">Sports</button>
+      <button class="news-tab" data-cat="ads">Advertising</button>
+    </div>
+    <div class="news-grid" id="newsGrid">
+      <!-- real JOYX news -->
+      <article class="ncard reveal d1" data-cat="joyx">
+        <div class="meta"><span class="cat">JOYX News</span><span class="date">May 18, 2026</span></div>
+        <h3>Overnght and JOYX forge partnership to bring cloud-native spatial AI to live sports</h3>
+        <p>A multi-year strategic partnership deploying zero-hardware, broadcast-grade 3D spatial graphics across Olympic, collegiate, and emerging sports.</p>
+        <a class="more" href="#">Read release <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+      <article class="ncard reveal d2" data-cat="joyx">
+        <div class="meta"><span class="cat">JOYX News</span><span class="date">Feb 24, 2025</span></div>
+        <h3>JOYX launches JoyAd virtual billboards on AWS, completes Foundational Technical Review</h3>
+        <p>JoyAd transforms unused video space into dynamic virtual billboards with real-time 3D modeling, rendering, and insertion — powered by AWS.</p>
+        <a class="more" href="#">Read release <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+      <!-- curated-news slots -->
+      <article class="ncard slot reveal d3" data-cat="ai">
+        <div class="meta"><span class="cat">Spatial AI</span></div>
+        <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+        <h3>Spatial-AI updates land here</h3>
+        <p>A slot for product milestones, research, and platform news — add a headline, date, and link.</p>
+      </article>
+      <article class="ncard slot reveal d3" data-cat="sports">
+        <div class="meta"><span class="cat">Sports</span></div>
+        <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+        <h3>Live-sports stories land here</h3>
+        <p>A slot for partner sports, league coverage, and event highlights.</p>
+      </article>
+      <article class="ncard slot reveal d4" data-cat="ads">
+        <div class="meta"><span class="cat">Advertising</span></div>
+        <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+        <h3>Brand &amp; advertising insights land here</h3>
+        <p>A slot for sponsor wins, market trends, and category thought leadership.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="block" id="contact">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div class="eyebrow" style="justify-content:center">Let's talk</div>
+      <h2>Let's monetize the blank.</h2>
+      <p>See JoyAd running on your sport — live, on AWS, in real time.</p>
+      <div class="cta-row">
+        <a href="mailto:hello@myjoyx.com" class="btn">Request a demo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="mailto:partners@myjoyx.com" class="btn ghost">Partner with us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#" class="logo">JOY<b>X</b></a>
+        <p>Spatial AI for live sports. Broadcast-grade virtual billboards, generated and inserted in real time.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Product</h4>
+        <a href="#platform">JoyAd platform</a>
+        <a href="#technology">Spatial intelligence</a>
+        <a href="#sports">Sports coverage</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="#partners">Partners</a>
+        <a href="#news">News</a>
+        <a href="#infrastructure">Built on AWS</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h4>Get in touch</h4>
+        <a href="mailto:hello@myjoyx.com">hello@myjoyx.com</a>
+        <a href="mailto:partners@myjoyx.com">partners@myjoyx.com</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 JOYX Inc. All rights reserved.</span>
+      <span>Powered by AWS · Las Vegas, NV</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // nav scroll state
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 30);
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  // mobile menu
+  const toggle = document.getElementById('menuToggle');
+  const links = document.getElementById('navlinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  // scroll reveals
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+
+  // news filter tabs
+  const newsTabs = document.getElementById('newsTabs');
+  const newsCards = document.querySelectorAll('#newsGrid .ncard');
+  newsTabs.addEventListener('click', (e) => {
+    const btn = e.target.closest('.news-tab'); if(!btn) return;
+    newsTabs.querySelectorAll('.news-tab').forEach(b => b.classList.toggle('active', b===btn));
+    const cat = btn.dataset.cat;
+    newsCards.forEach(c => c.classList.toggle('hide', !(cat==='all' || c.dataset.cat===cat)));
+  });
+</script>
+<style>
+  /* scene animations */
+  .grid line{stroke-dasharray:600;stroke-dashoffset:600;animation:draw 1.4s var(--ease) forwards}
+  .grid line:nth-child(n+2){animation-delay:.1s}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .billboard{transform-origin:320px 336px;opacity:0;transform:scale(.6);animation:boardIn .8s var(--ease) .9s forwards}
+  @keyframes boardIn{to{opacity:1;transform:scale(1)}}
+  .track path{stroke-dasharray:60;stroke-dashoffset:60;animation:draw .6s var(--ease) 1.3s forwards}
+  .reticle{opacity:0;animation:fadeIn .4s ease 1.6s forwards}
+  @keyframes fadeIn{to{opacity:1}}
+  .scan{opacity:0;animation:scanMove 3.4s linear 1.8s infinite}
+  @keyframes scanMove{0%{opacity:0;transform:translateY(210px)}10%{opacity:.7}90%{opacity:.7}100%{opacity:0;transform:translateY(470px)}}
+  @media(prefers-reduced-motion:reduce){
+    .grid line,.billboard,.track path,.reticle,.scan{animation:none;opacity:1;stroke-dashoffset:0;transform:none}
+  }
+</style>
+</body>
+</html>
