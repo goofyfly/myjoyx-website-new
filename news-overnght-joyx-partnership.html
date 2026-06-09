@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overnght and JOYX Forge Groundbreaking Partnership | JOYX Newsroom</title>
+<meta name="description" content="Overnght and JOYX announce a multi-year strategic partnership to bring zero-hardware, broadcast-grade 3D spatial graphics to live sports — powered by real-time Spatial AI on AWS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07090d;--bg-1:#0b0f15;--bg-2:#10151d;
+    --line:rgba(255,255,255,.09);--line-2:rgba(255,255,255,.14);
+    --text:#f3f6f8;--dim:#9aa6b4;--dimmer:#5d6979;
+    --accent:#4ef0a0;--accent-2:#37d6ff;--accent-soft:rgba(78,240,160,.12);--accent-line:rgba(78,240,160,.35);
+    --maxw:1200px;--r:14px;--ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--text);font-family:"Hanken Grotesk",sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(900px 600px at 80% -10%,rgba(78,240,160,.08),transparent 60%),radial-gradient(800px 700px at 5% 12%,rgba(55,214,255,.05),transparent 55%)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:2}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--accent);color:#04130b}
+  h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;line-height:1.05;letter-spacing:-.02em}
+
+  /* nav */
+  header.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all .35s var(--ease)}
+  .nav-inner{max-width:var(--maxw);margin:0 auto;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;transition:padding .35s var(--ease)}
+  header.nav.scrolled{background:rgba(7,9,13,.72);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+  header.nav.scrolled .nav-inner{padding:13px 28px}
+  .logo{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:22px;letter-spacing:-.03em;display:flex;align-items:center}
+  .logo b{color:var(--accent);font-weight:800}
+  .logo .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-left:6px;box-shadow:0 0 12px var(--accent);animation:pulse 2.4s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+  nav.links{display:flex;gap:34px;align-items:center}
+  nav.links a{font-size:14.5px;color:var(--dim);font-weight:500;transition:color .2s;position:relative}
+  nav.links a:hover{color:var(--text)}
+  nav.links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--accent);transition:width .25s var(--ease)}
+  nav.links a:hover::after{width:100%}
+  .menu-toggle{display:none;background:none;border:1px solid var(--line-2);border-radius:10px;width:42px;height:42px;cursor:pointer;color:var(--text);align-items:center;justify-content:center}
+  .menu-toggle svg{width:20px;height:20px}
+
+  /* article */
+  .article{padding:150px 0 40px}
+  .measure{max-width:760px;margin:0 auto}
+  .back{display:inline-flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:34px;transition:color .2s}
+  .back:hover{color:var(--accent)}
+  .back svg{width:14px;height:14px}
+  .cobrand{display:flex;align-items:center;gap:14px;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:17px;color:var(--dim);margin-bottom:22px}
+  .cobrand .x{color:var(--accent);font-size:14px}
+  .release-meta{display:flex;align-items:center;gap:12px;font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  .release-meta .dot{width:5px;height:5px;border-radius:50%;background:var(--dimmer)}
+  .release-meta .date{color:var(--dimmer)}
+  h1.headline{font-size:clamp(30px,4.4vw,46px);font-weight:800;margin-bottom:30px}
+  .article p{color:#d7dde4;margin-bottom:20px;font-size:17.5px;line-height:1.72}
+  .article p .dateline{font-weight:700;color:var(--text)}
+  .article p .lead-in{font-weight:700;color:var(--text)}
+  .article p strong{font-weight:700;color:var(--text)}
+  .sec-h{font-size:23px;font-weight:700;margin:42px 0 18px;letter-spacing:-.01em}
+  .rule{height:1px;background:var(--line);border:0;margin:30px 0}
+  blockquote.pr-quote{margin:26px 0 10px;padding:4px 0 4px 24px;border-left:2px solid var(--accent-line);
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:500;font-size:20px;line-height:1.5;letter-spacing:-.01em;color:#eef2f5;font-style:normal}
+  .attribution{font-family:"JetBrains Mono",monospace;font-size:12.5px;letter-spacing:.06em;color:var(--dim);margin:0 0 30px 24px}
+  .attribution b{color:var(--text);font-weight:600}
+  .about-block{margin-top:14px}
+  .about-h{font-size:17px;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;color:var(--text);margin:30px 0 10px}
+  .article a.inline-link{color:var(--accent);border-bottom:1px solid var(--accent-line);transition:border-color .2s}
+  .article a.inline-link:hover{border-color:var(--accent)}
+  .imm{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dimmer);margin-bottom:20px}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:54px 0 40px;margin-top:60px}
+  .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;margin-bottom:46px}
+  .foot-brand .logo{margin-bottom:16px}
+  .foot-brand p{color:var(--dim);font-size:14.5px;max-width:280px}
+  .foot-col h4{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dimmer);margin-bottom:18px;font-weight:500}
+  .foot-col a{display:block;color:var(--dim);font-size:14.5px;margin-bottom:11px;transition:color .2s}
+  .foot-col a:hover{color:var(--accent)}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--line);flex-wrap:wrap;gap:14px}
+  .foot-bottom span{color:var(--dimmer);font-size:13px;font-family:"JetBrains Mono",monospace;letter-spacing:.04em}
+
+  @media(max-width:900px){
+    nav.links{display:none}
+    .menu-toggle{display:flex}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:32px}
+    .article{padding:120px 0 30px}
+    nav.links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:rgba(7,9,13,.97);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:10px 28px 22px}
+    nav.links.open a{padding:14px 0;border-bottom:1px solid var(--line);width:100%}
+  }
+  @media(max-width:560px){.foot-grid{grid-template-columns:1fr}.wrap{padding:0 20px}}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">JOY<b>X</b><span class="dot"></span></a>
+    <nav class="links" id="navlinks">
+      <a href="index.html#platform">Platform</a>
+      <a href="index.html#technology">Technology</a>
+      <a href="index.html#sports">Sports</a>
+      <a href="index.html#partners">Partners</a>
+      <a href="index.html#news">News</a>
+      <a href="index.html#company">Company</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<article class="article">
+  <div class="wrap measure">
+    <a href="index.html#news" class="back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+      Back to Newsroom
+    </a>
+
+    <div class="cobrand">Overnght <span class="x">&times;</span> JOYX</div>
+    <div class="release-meta"><span>Press Release</span><span class="dot"></span><span class="date">June 8, 2026</span></div>
+    <div class="imm">For Immediate Release</div>
+
+    <h1 class="headline">Overnght and JOYX Forge Groundbreaking Partnership to Elevate Fan Experience and Unlock Unprecedented Value Across the Sports Ecosystem with Cloud-Native Spatial AI</h1>
+
+    <p><span class="dateline">LAS VEGAS, NV — June 8, 2026 —</span> Overnght, the fastest-growing global streaming network for Olympic, collegiate, and premium emerging sports, today announced a disruptive strategic partnership with <strong>JOYX Inc.</strong>, a pioneer in Spatial AI and real-time video solutions. Together, the companies are set to redefine live sports broadcasting by deploying zero-hardware, broadcast-grade 3D spatial graphics—elevating the viewing experience while simultaneously creating high-margin digital assets across the entire sports value chain.</p>
+
+    <p>The multi-year collaboration will launch with an aggressive initial phase, prominently featuring top-tier national competitions from a diverse array of premium emerging sports properties.</p>
+
+    <h2 class="sec-h">Elevating the Broadcast &amp; Maximizing the Value Chain</h2>
+
+    <p>Historically, delivering premium on-screen graphics required massive on-site infrastructure, restricting these capabilities to a handful of legacy broadcast networks. JOYX’s proprietary AIGC engine bypasses these physical limitations entirely. By utilizing advanced computer vision to instantaneously map complex 3D environments from a pure cloud feed, the partnership unlocks a sustainable ecosystem that benefits platforms, leagues, and sponsors:</p>
+
+    <p><span class="lead-in">Unlocking Underutilized Spatial Assets:</span> JOYX’s Spatial AI intelligently identifies and utilizes blank physical spaces—such as open water, bare facility walls, or empty court areas—transforming them into high-value digital real estate. This allows Overnght to offer premium digital ad inventory without altering the physical venue.</p>
+
+    <p><span class="lead-in">Real-Time In-Play &amp; Non-Intrusive Branding:</span> Breaking the constraints of traditional virtual advertising limited to pauses or dead-ball situations, JOYX seamlessly renders and anchors hyper-realistic 3D graphics directly into the live stream during active, high-velocity gameplay. This ‘live-action, live-exposure’ visual storytelling integrates brand partners naturally into the broadcast without distracting from the game or interrupting the fan’s immersive viewing experience, driving massive commercial ROI.</p>
+
+    <p><span class="lead-in">Zero On-Site Footprint:</span> Operating 100% in the cloud on Amazon Web Services (AWS), JOYX empowers Overnght to deploy these cutting-edge visual enhancements globally, leveraging the elastic scalability, reliability, and worldwide reach of AWS to serve audiences anywhere. With both Overnght and JOYX built on AWS, the entire workflow—from live streaming delivery to real-time graphics rendering—operates as a unified, cloud-native pipeline, enabling seamless integration, low latency, and reliable performance at scale. This zero-CAPEX approach drastically reduces production costs, ensuring that more revenue flows back into the emerging sports value chain rather than being spent on hardware logistics.</p>
+
+    <h2 class="sec-h">Executive Perspectives</h2>
+
+    <blockquote class="pr-quote">“I founded Overnght with a singular mission: to give the incredibly passionate communities of Olympic and emerging sports the world-class broadcast platform they truly deserve. Partnering with JOYX achieves exactly that, while simultaneously creating a powerful financial engine. By turning blank spaces into premium digital inventory, we deliver unprecedented ROI for our sponsors and generate new, sustainable revenue streams that benefit the entire sports value chain—empowering the athletes, the leagues, and our platform to grow together.”</blockquote>
+    <p class="attribution">— <b>Kevin McReynolds</b>, CEO of Overnght</p>
+
+    <blockquote class="pr-quote">“We are thrilled to help Kevin and the Overnght team realize their vision of democratizing premium sports broadcasting. The future of sports media lives in the cloud, where technology drives both fan engagement and business growth. By transforming previously unmonetizable spaces into dynamic, high-yield brand touchpoints directly within the live action, our zero-CAPEX spatial computing platform creates a true win-win ecosystem. It delivers a visually stunning entertainment experience for fans, while unlocking limitless commercial value for forward-thinking global brands.”</blockquote>
+    <p class="attribution">— <b>Tong Zhang</b>, CEO of JOYX</p>
+
+    <hr class="rule">
+
+    <div class="about-block">
+      <h3 class="about-h">About Overnght</h3>
+      <p>Overnght is a premier global sports streaming platform dedicated to aggregating exclusive rights for Olympic, collegiate, and rapidly growing emerging sports. Built on a foundation of deep community engagement, original storytelling, and live broadcasts, Overnght holds major multi-year digital rights agreements with premium sports entities including USRowing, USA Water Polo, and more, providing fiercely loyal fanbases with the definitive digital home for their sports. <a class="inline-link" href="https://www.overnght.com" target="_blank" rel="noopener">https://www.overnght.com</a></p>
+
+      <h3 class="about-h">About JOYX</h3>
+      <p>JOYX is a cutting-edge spatial computing and AI video advertising company with deep R&amp;D roots in Silicon Valley. Built on a cloud-native architecture running entirely on Amazon Web Services (AWS) and designed for the modern streaming era, JOYX’s proprietary AI platform utilizes real-time computer vision and 3D rendering to seamlessly integrate broadcast-grade virtual graphics directly into live video streams and venue environments. By transforming underutilized spaces into dynamic virtual billboards without physical on-site integrations, JOYX empowers broadcasters, leagues, and content owners to effortlessly elevate their visual presentation and maximize commercial revenue. <a class="inline-link" href="https://myjoyx.com" target="_blank" rel="noopener">https://myjoyx.com</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="logo">JOY<b>X</b></a>
+        <p>Spatial AI for live sports. Broadcast-grade virtual billboards, generated and inserted in real time.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Product</h4>
+        <a href="index.html#platform">JoyAd platform</a>
+        <a href="index.html#technology">Spatial intelligence</a>
+        <a href="index.html#sports">Sports coverage</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="index.html#partners">Partners</a>
+        <a href="index.html#news">News</a>
+        <a href="index.html#infrastructure">Built on AWS</a>
+      </div>
+      <div class="foot-col">
+        <h4>Get in touch</h4>
+        <a href="mailto:hello@myjoyx.com">hello@myjoyx.com</a>
+        <a href="mailto:partners@myjoyx.com">partners@myjoyx.com</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 JOYX Inc. All rights reserved.</span>
+      <span>Powered by AWS · Las Vegas, NV</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 30);
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  const toggle = document.getElementById('menuToggle');
+  const links = document.getElementById('navlinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+</script>
+</body>
+</html>
